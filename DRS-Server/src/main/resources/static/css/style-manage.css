@@ -1,0 +1,115 @@
+.managePanel {
+    height: auto;
+    min-height: 100%;
+    width: 220px;
+    border-right: 1px solid rgb(200, 200, 200);
+    position: fixed;
+    height: 100%;
+    background-color: white;
+    z-index: 1;
+}
+.manageElement {
+    padding-left: 4%;
+    font-size: 18px;
+    height: 40px;
+    background-color: white;
+    border-bottom: 1px dashed rgb(200,200,200);
+    line-height: 40px;
+}
+.select:before  {
+    position: absolute;
+    content: "#";
+    color: rgb(160, 160, 170);
+    width: 18px;
+    height: 42px;
+    margin-top: -1px;
+    margin-left: -9px;
+    background-color: rgb(160, 160, 170);
+}
+.manageElement span{
+    padding-left: 48px;
+}
+.manageElement:first-child {
+    background-color: rgb(220,220,220);
+    font-weight: bold;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+}
+.manageElement:last-child {
+    margin-bottom: 100px;
+}
+.manageElement:first-child span {
+    padding-left: 18px;
+}
+.manageMonitor {
+    padding-left: 250px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    z-index: 0;
+}
+
+.manageCard {
+    background-color: white;
+    border: 1px dashed rgb(180, 180, 180);
+    margin-right: 30px;
+    border-radius: 20px;
+    padding: 30px 30px;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+.questionOption:last-child{
+    margin-bottom: 4px;
+}
+.questionOption input[type="text"]{
+    width: 90px;
+    margin-left: 20px;
+}
+.manageCard span{
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+    font-size: 20px;
+}
+.manageCard label{
+    display: block;
+    margin-top: 4px;
+    margin-left: 20px;
+}
+.manageCard label input[type="radio"]{
+    margin-top: -5px;
+}
+.controlElement {
+    position: absolute;
+    bottom: 0;
+    width: 160px;
+    display: inline-block;
+    left: 50%;
+    margin-left: -80px;
+    height: 50px;
+}
+
+.monitorTitle {
+    font-size: 26px;
+    font-weight: bold;
+    width: 100%;
+    border-bottom: 1px dashed rgb(204, 204, 204);
+    padding-left: 14px;
+    margin-bottom: 20px;
+}
+
+.questionOption {
+    margin-bottom: 40px;
+}
+
+.beforeInput {
+    display: inline-block;
+    margin-left: 20px;
+}
+.chosenGroup span{
+    height: 22px;
+    margin-left: 24px;
+}
+.removeIcon{
+    margin-top: -34px;
+}

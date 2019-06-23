@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style-question.css">
+</head>
+<body>
+<div class="questionContainer">
+    <transition name="model-trans">
+        <div class="model-background" @click="hiddenModel()" v-show="modelData.backgroundShow"></div>
+    </transition>
+    <transition name="model-trans">
+        <div class="model-panel" v-show="modelData.modelShow" :style="modelData.modelStyle">
+            <span>{{modelData.title}}</span>
+            <p>{{modelData.info}}</p>
+            <input type="button" value="好的" @click="hiddenModel()">
+        </div>
+    </transition>
+    <img class="questionHeaderImg" src="img/background_header.jpg">
+    <div class="questionBody">
+        <span class="questionHeader">学生分寝意向表</span>
+        <p class="introduction">
+            我们会跟你您选择的问题,&nbsp;为您推荐最适合您的室友,&nbsp;请认真选择哦!
+        </p>
+        <div class="questionElement" v-for="(questionEle, qIndex) in questionData">
+            <!-- 左侧小提示 -->
+            <div class="questionTips" v-if="typeof(questionEle.tips)!=='undefined'&&questionEle.tips!=''">
+                <div class="right"></div>
+                <p>{{questionEle.tips}}</p>
+            </div>
+            <!-- 问题介绍 -->
+            <div class="questionIntrlduction">
+                <!-- 问题选择类型 -->
+                <span :class="questionEle.chooseType">
+                        {{qIndex+1}},&nbsp;{{questionEle.introduction}}&nbsp;({{questionChoseType[questionEle.chooseType]}})&nbsp;{{(questionEle.displayType&4)!=0?'(点击选择结果以强调选项)':''}}
+                    </span>
+            </div>
+            <!-- 答案显示区域 -->
+            <div class="questionAnswerArea">
+                <!-- 单选RadioButton -->
+                <label v-for="(option, oIndex) in questionEle.option" v-if="questionEle.questionType==1">
+                    <input type="radio" :name="questionEle.qid" v-model="questionEle.bindChooseResult" :value="oIndex">{{String.fromCharCode(oIndex+65)}}.&nbsp;&nbsp;{{option}}
+                </label>
+                <!-- 多选选项按钮 -->
+                <div class="answerOption" v-if="questionEle.questionType==2"
+                     v-for="(option, oIndex) in questionEle.option"
+                     @click="addResult(qIndex, oIndex, questionEle.chooseType)">{{option}}
+                </div>
+                <!-- 选择区间类型答案 -->
+                <div class="addSelect" v-if="questionEle.questionType==3">
+                    <div class="chooseElement" v-for="(select, sIndex) in questionEle.section">
+                        <span>{{select.selectIntro}}:</span>
+                        <select v-model="questionData[qIndex].section[sIndex].bindValue">
+                            <option :value="sonSelect" v-for="(sonSelect,sonIndex) in select.selectOption"
+                                    :selected="sonIndex==0?'selected':''">{{sonSelect}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="chooseElement">
+                        <input type="button" value="添加" @click="addSectionButton(qIndex, questionEle.chooseType)">
+                    </div>
+                </div>
+                <!-- 可选自定义添加答案 -->
+                <div class="extAnswer" v-if="(questionEle.displayType&1)!=0">
+                    <span>{{questionEle.extra.extIntro}}:</span>
+                    <input class="extAnswerInput" :placeholder="questionEle.extra.extPlaceholder"
+                           :style="questionEle.extra.extFrontStyle" :value="questionEle.extra.extDefaultValue"
+                           v-model="questionEle.extra.extBindValue" type="text">
+                    <input type="button" v-if="questionEle.extra.extAddButtonValue!=''"
+                           :value="questionEle.extra.extAddButtonValue"
+                           @click="addCustomAnswerButton(qIndex, questionEle.chooseType)">
+                </div>
+                <!-- 显示答案选择结果 -->
+                <div class="selectResult" v-if="(questionEle.displayType&2 )!=0">
+                    <div class="chosenGroup" v-for="(resultElement, rIndex) in questionResult[qIndex]">
+                        <span @click="stressChosen(qIndex, rIndex)">{{(questionEle.displayType&4)!=0 ? questionResultStressLevel[resultElement.stress]+': ':''}}{{resultElement.word}}</span>
+                        <div class="removeIcon" @click="removeResult(qIndex, rIndex)">
+                            <div class="remove icon"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typeSplit" style="border-bottom-color: rgb(139, 139, 139)"></div>
+        <div class="questionControl">
+            <input type="button" style="margin-left: 20%" value="重置" onclick="location.reload()">
+            <input type="button" style="margin-left: 30%" value="提交" @click="postAllAnswer()">
+        </div>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script src="js/library.js"></script>
+<script src="js/app-question.js"></script>
+<script src="js/action-question.js"></script>
+</body>
+</html>

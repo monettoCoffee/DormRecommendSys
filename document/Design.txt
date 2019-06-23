@@ -1,0 +1,67 @@
+Todo
+    计算方式不用这么麻烦，在分析权重时两两记住相似度就好了，dict嵌套解决！
+    Weight 非自动分析问题权重未加入 !!!
+    Section 类型除了时间加入别的
+    加入登录和注册界面
+    前端使用懒加载QuestionData? 因为每个人选择速度不一样，下个人有了上个人的缓冲
+    从缓存中取出时要进行反序列化, 考虑改良fastjson
+    加入前端选择结果数据校验
+    py计算部分引入numpy优化代码
+    加入404页面
+    最后全局Review一下代码
+    检查HTML CSS JS 代码规范性，特别是class命名
+    Section Json 分成具体字段属性方便后期进行更改
+
+数据源:
+    1. WeakHashMap Cache
+    2. Redis Cache
+    3. MySQL Database
+
+WeakHashMap:
+    使用弱引用缓存, 以保证内存不足时触发GC被回收。
+
+Redis:
+    dorm_question (hash):
+        Description: 已完成缓存的所有问题的qid
+        Key: 缓存过的问题的qid
+        Value: 问题的JSON序列
+
+数据库:
+    库名: dorm
+    表:
+        dorm_question 问题的题干
+        dorm_question_extra 问题的附加部分
+        dorm_question_direction 问题的语义种类分类
+        dorm_select_group 区间类型问题-区间定义
+        dorm_question_plan 问题批次(选择计划)
+        dorm_user_chosen 用户选择的结果
+
+    字段Value映射关系:
+        dorm_question.question_type: 问题选择方式
+            1: 单选类型
+            2: 多选类型
+            3: 区间选择类型
+        dorm_question.display_type: 问题显示类型
+            二进制 第1位: 是否附有额外答案 &1 != 0
+            二进制 第2位: 是否显示选择结果 &2 != 0
+            二进制 第3位: 可强调选项 &4 != 0
+            // 例如同时有额外答案且选择结果, 即为 0011, 十进制3
+        dorm_question.choose_type: 问题选择数量
+            1: 单选
+            2: 最多选择两项
+            0: 可多选
+        dorm_question.did: 问题方向属性
+            0: 学习习惯
+            1: 生活习惯
+            2: 个人爱好
+            3: 寝室属性
+
+Q & A:
+    Q: 为什么要用缓存机制, 不直接存在MySQL里面?
+    A: 仅以本项目的场景做探讨, 一个学院一年级最多大概500人,
+       一个学校一个年级最多大概3000人。如果按照年级统一分寝室的话,
+       那么短时间内对MySQL访问的压力较大, 此时应该以缓存优先, 抗住IO压力。
+
+    Q: 为什么MySQL内存储问题不直接使用JSON形式?
+    A: 如果直接使用JSON形式存储问题, 是可以减少一步JSON转化所带来的性能消耗。
+       但是, 出于问题的可扩展性, 后端要做数据校验等原因, 最后还是选择分表存储。

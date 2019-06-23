@@ -1,0 +1,146 @@
+.questionHeaderImg {
+    display: inherit;
+    margin: 0 auto;
+    margin-right: 18%;
+    width: 60%;
+}
+.questionBody {
+    width: 50%;
+    height: auto;
+    background-color: white;
+    margin: 0 auto;
+    margin-right: 18%;
+    padding: 40px 5%;
+    box-shadow:0px 1px 6px 0px rgb(205,220,245);
+    margin-bottom: 50px;
+}
+.questionHeader {
+    display: inherit;
+    font-size: 40px;
+    color: rgba(90,131,255,0.6);
+    text-align:center;
+}
+.introduction {
+    font-size:20px;
+    margin: 0 auto;
+    width: 100%;
+    border-bottom: 1px dashed rgb(204, 204, 204);
+    margin-top: 45px;
+    color: rgb(68, 68, 68);
+    text-align: center;
+}
+.questionElement {
+    margin-top: 25px;
+    margin-bottom: 60px;
+    clear: both;
+}
+.questionIntrlduction span {
+    font-size: 19px;
+    font-weight: bold;
+}
+.typeSplit {
+    border-bottom: 1px solid rgb(239, 239, 239);
+    display: inline-block;
+    width: 100%;
+}
+.questionAnswerArea {
+    margin-top: 15px;
+    margin-left: 20px;
+}
+.chooseElement {
+    display: inline-block;
+    margin-right: 30px;
+}
+.questionAnswerArea label{
+    display: block;
+    margin-top: 4px;
+}
+.questionAnswerArea input{
+    margin-right:10px;
+    margin-top:-6px;
+}
+.addSelect {
+    height: 26px;
+}
+.addSelect select{
+    font-size: 14px;
+    height: 100%;
+    margin-top: -4px;
+    width: 80px;
+    text-align-last:center;
+}
+.selectResult {
+    margin-top: 10px;
+    clear: both;
+    user-select: none;
+    display: block;
+    margin-bottom: 20px;
+}
+.selectResult:before {
+    content: "添加结果: ";
+    float: left;
+    margin-top: 10px;
+    padding-right: 20px;
+}
+.chosenGroup {
+    display: inline-block;
+    width: auto;
+    margin-top: 10px;
+    float: left;
+    cursor: pointer;
+}
+.chosenGroup span {
+    border: 1px dashed rgb(150, 150, 150);
+    padding: 0px 20px;
+    margin-right: 17px;
+}
+.extAnswer {
+    margin-top: 14px;
+    clear: both;
+}
+.extAnswer input{
+    margin-top: -2px;
+}
+.answerOption {
+    display: inline-block;
+    border: 1px solid rgb(150, 150, 150);
+    border-radius: 5px;
+    padding: 0 20px;
+    float: left;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    user-select: none;
+}
+.chosen {
+    background-color: rgba(230, 230, 230);
+}
+.right{width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-left: 15px solid rgb(255, 255, 255);
+    border-bottom: 15px solid transparent;
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    margin-left: 96px;
+    margin-top: 5px;
+}
+.questionTips {
+    margin-left: -200px;
+    position: absolute;
+    width: 90px;
+    height: auto;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px;
+    border-radius: 15px;
+    color: rgba(120, 120, 120);
+}
+
+.questionIntrlduction {
+    user-select: none; 
+}
+
+.questionControl {
+    margin-top: 4%
+}

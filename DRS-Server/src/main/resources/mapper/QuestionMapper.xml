@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.QuestionDao">
+
+    <!-- Get front json data -->
+    <select id="getFrontQuestionDataByQid" resultMap="frontQuestionData">
+        SELECT
+        question.qid AS qid,
+        question.did AS did,
+        question.choose_type AS choose_type,
+        question.display_type AS display_type,
+        question.question_type AS question_type,
+        question.did AS question_did,
+        question.introduction AS introduction,
+        question.option_json AS option_json,
+        question.tips AS tips,
+        extra.eid AS eid,
+        extra.ext_intro AS ext_intro,
+        extra.ext_placeholder AS ext_placeholder,
+        extra.ext_default_value AS ext_default_value,
+        extra.ext_add_button_value AS ext_add_button_value,
+        section.sid AS sid,
+        section.section_json AS section_json
+        FROM
+        dorm_question AS question
+        LEFT JOIN
+        dorm_question_extra AS extra
+        ON
+        question.qid = extra.qid
+        LEFT JOIN
+        dorm_question_section AS section
+        ON
+        question.qid = section.qid
+        WHERE
+        question.qid IN
+        <foreach collection="list" item="qid" index="index" open="(" close=")" separator=",">
+            #{qid}
+        </foreach>
+    </select>
+    <resultMap id="frontQuestionData" type="java.util.HashMap">
+        <result property="qid" column="qid" javaType="int"/>
+        <result property="did" column="did" javaType="int"/>
+        <result property="tips" column="tips" javaType="String"/>
+        <result property="introduction" column="introduction" javaType="String"/>
+        <result property="option" column="option_json" typeHandler="com.config.JsonTypeHandler"/>
+        <result property="chooseType" column="choose_type" javaType="int"/>
+        <result property="displayType" column="display_type" javaType="int"/>
+        <result property="questionType" column="question_type" javaType="int"/>
+        <result property="section" column="section_json" typeHandler="com.config.JsonTypeHandler"/>
+        <association property="extra" resultMap="frontQuestionDataExtra"/>
+    </resultMap>
+    <resultMap id="frontQuestionDataExtra" type="java.util.HashMap">
+        <result property="eid" column="eid" javaType="int"/>
+        <result property="extIntro" column="ext_intro" javaType="String"/>
+        <result property="extPlaceholder" column="ext_placeholder" javaType="String"/>
+        <result property="extDefaultValue" column="ext_default_value" javaType="String"/>
+        <result property="extAddButtonValue" column="ext_add_button_value" javaType="String"/>
+    </resultMap>
+
+
+    <!-- Get one entry by id -->
+    <select id="getQuestionByQid" resultType="com.entry.QuestionBodyDO">
+        SELECT * FROM dorm_question WHERE qid = #{qid};
+    </select>
+
+    <select id="getQuestionExtraByQid" resultType="com.entry.QuestionExtraDO">
+        SELECT * FROM dorm_question_extra WHERE qid = #{qid};
+    </select>
+
+    <select id="getQuestionSectionByQid" resultType="com.entry.QuestionSectionDO">
+        SELECT * FROM dorm_question_section WHERE qid IN = #{qid};
+    </select>
+
+
+    <!-- Get entry list by id -->
+    <select id="getQuestionListByQid" resultType="com.entry.QuestionBodyDO">
+        SELECT * FROM dorm_question WHERE qid IN
+        <foreach collection="list" item="qid" index="index" open="(" close=")" separator=",">
+            #{qid}
+        </foreach>
+    </select>
+
+    <select id="getQuestionExtraListByQid" resultType="com.entry.QuestionExtraDO">
+        SELECT * FROM dorm_question_extra WHERE qid IN
+        <foreach collection="list" item="qid" index="index" open="(" close=")" separator=",">
+            #{qid}
+        </foreach>
+    </select>
+
+    <select id="getQuestionSectionListByQid" resultType="com.entry.QuestionSectionDO">
+        SELECT * FROM dorm_question_section WHERE qid IN
+        <foreach collection="list" item="qid" index="index" open="(" close=")" separator=",">
+            #{qid}
+        </foreach>
+    </select>
+
+</mapper>

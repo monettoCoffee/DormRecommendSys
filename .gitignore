@@ -1,0 +1,11 @@
+.DS_Store
+.idea
+
+target
+__pycache__
+*.pyc
+
+*.iml
+
+node_modules
+dist

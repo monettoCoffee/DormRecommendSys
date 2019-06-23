@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style-manage.css">
+    <link rel="stylesheet" type="text/css" href="css/style-question.css">
+</head>
+<body>
+<div class="manageContainer">
+    <div class="managePanel">
+        <div class="manageElement">
+            <span>系统问题管理面板</span>
+        </div>
+        <div class="controlElement">
+            <div class="shutdown icon" onclick="alert('注销')"></div>
+        </div>
+        <div class="manageElement select">
+            <div class="navigate icon"><i></i></div>
+            <span>添加问题类别</span>
+        </div>
+        <div class="manageElement">
+            <div class="float icon"><i></i></div>
+            <span>管理问题类别</span>
+        </div>
+        <div class="manageElement  select">
+            <div class="tag icon"></div>
+            <span>添加问卷问题</span>
+        </div>
+        <div class="manageElement">
+            <div class="edit icon"></div>
+            <span>管理问卷问题</span>
+        </div>
+        <div class="manageElement">
+            <div class="profile icon"></div>
+            <span>学生添加管理</span>
+        </div>
+        <div class="manageElement">
+            <div class="chat icon"></div>
+            <span>添加选择计划</span>
+        </div>
+        <div class="manageElement">
+            <div class="left-double-quote-solid icon"><i></i></div>
+            <span>管理选择计划</span>
+        </div>
+        <div class="manageElement">
+            <div class="menu icon"></div>
+            <span>分配结果查看</span>
+        </div>
+    </div>
+    <div class="manageMonitor">
+        <div class="manageCard">
+            <div class="monitorTitle">添加问题类别</div>
+            <div class="questionOption">
+                <span>1,&nbsp;问题类型?</span>
+                <label>
+                    <input type="radio" name="questionType" value="one_chosen">
+                    &nbsp;单选
+                </label>
+                <label>
+                    <input type="radio" name="questionType" value="one_chosen">
+                    &nbsp;多选
+                </label>
+                <label>
+                    <input type="radio" name="questionType" value="section_chosen">
+                    &nbsp;区间选择
+                </label>
+            </div>
+            <div class="questionOption">
+                <span>2,&nbsp;是否配置附加答案?</span>
+                <label>
+                    <input type="radio">
+                    &nbsp;无附加答案
+                </label>
+                <label>
+                    <input type="radio">
+                    &nbsp;带有附加答案
+                </label>
+            </div>
+            <div class="questionOption">
+                <span>3,&nbsp;最多允许选择几项?</span>
+                <label>
+                    <input type="radio">
+                    &nbsp;单选
+                </label>
+                <label>
+                    <input type="radio">
+                    &nbsp;双选
+                </label>
+                <label>
+                    <input type="radio">
+                    &nbsp;三选
+                </label>
+                <label>
+                    <input type="radio">
+                    &nbsp;不限多选
+                </label>
+            </div>
+            <div class="questionOption">
+                <span>4,&nbsp;问题的题目是什么?</span>
+                <div class="beforeInput">题目:</div><input type="text">
+            </div>
+            <div class="questionOption">
+                <span>5,&nbsp;问题有相应的提示吗?&nbsp;(如无则空)</span>
+                <div class="beforeInput">提示:</div><input type="text">
+            </div>
+            <div class="questionOption">
+                <span>6,&nbsp;问题有哪些选项?&nbsp;</span>
+                <div class="beforeInput">选项:</div><input type="text">
+                <input type="button" value="添加">
+                <div class="questionAnswerArea">
+                    <div class="selectResult">
+                        <div class="chosenGroup">
+                            <span>"12321"</span>
+                            <div class="removeIcon">
+                                <div class="remove icon"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script src="js/library.js"></script>
+<script src="js/app-manage.js"></script>
+<script src="js/action-manage.js"></script>
+<script>
+    var app = new Vue({
+        el: ".manageContainer",
+        data: {
+            // 模态框的基本属性
+            modelData: {
+                info: "info",
+                title: "title",
+                modelShow: false,
+                backgroundShow: false,
+                modelStyle: "",
+            },
+        },
+        methods: {
+
+        }
+    });
+</script>
+</body>
+</html>
