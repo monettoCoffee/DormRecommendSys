@@ -39,6 +39,9 @@ class Cluster(object):
         msg += str(self.vector_list)
         return msg
 
+    def __len__(self):
+        return len(self.vector_list)
+
     # 计算两个Cluster之间的相似度/距离
     def get_distance(self, another_cluster, calculate_method=EuclideanDistance):
         return self.vector_list.get_vector_distance(another_cluster.vector_list, calculate_method)
@@ -74,6 +77,9 @@ class ClusterVector(object):
             msg += " %s ," % str(self_vector)
         return msg[0: len(msg) - 1]
 
+    def __len__(self):
+        return len(self.vector_list)
+
 
 def init_cluster(matrix):
     """
@@ -88,7 +94,7 @@ def init_cluster(matrix):
     return cluster_list
 
 
-def analyse(cluster_list, stop_number, calculate_method=EuclideanDistance):
+def analyse(cluster_list, stop_number, cluster_elements_number=None, calculate_method=EuclideanDistance):
     """
     :param cluster_list: all of the cluster in this list
     :param stop_number: How many type of cluster
@@ -98,14 +104,22 @@ def analyse(cluster_list, stop_number, calculate_method=EuclideanDistance):
     to_merge_cluster, be_merged_cluster = None, None
     # 记录被合并的Cluster的下标
     pop_index = -1
+    if cluster_elements_number and len(cluster_list)/stop_number > cluster_elements_number:
+        raise Exception("Stop_number * cluster_elements_number is smaller than total number")
     while len(cluster_list) > stop_number:
         distance = get_edge(calculate_method)
         in_index = len(cluster_list) - 1
-        while in_index > -1:
+        while in_index > 0:
+            in_cluster = cluster_list[in_index]
+            if cluster_elements_number and len(in_cluster) >= cluster_elements_number:
+                in_index -= 1
+                continue
             out_index = in_index - 1
             while out_index > -1:
-                in_cluster = cluster_list[in_index]
                 out_cluster = cluster_list[out_index]
+                if cluster_elements_number and len(out_cluster) >= cluster_elements_number:
+                    out_index -= 1
+                    continue
                 similarity = in_cluster.get_distance(out_cluster, calculate_method)
                 if compare_distance(calculate_method, similarity > distance):
                     distance = similarity
@@ -119,7 +133,7 @@ def analyse(cluster_list, stop_number, calculate_method=EuclideanDistance):
         cluster_list.pop(pop_index)
 
 
-def execute(vector_list, stop_number, calculate_method=EuclideanDistance):
+def execute(vector_list, stop_number, cluster_elements_number=None, calculate_method=EuclideanDistance):
     """
     :param vector_list: multi-dimensional vector collection matrix(n x n)
     :param stop_number: How many type of cluster
@@ -127,28 +141,28 @@ def execute(vector_list, stop_number, calculate_method=EuclideanDistance):
     :return: the list of cluster that size is {stop_number}
     """
     all_cluster = init_cluster(vector_list)
-    analyse(all_cluster, stop_number, calculate_method)
+    analyse(all_cluster, stop_number, cluster_elements_number, calculate_method)
     return all_cluster
 
 
 if __name__ == "__main__":
     all_vector = [
         [1.1, 1.0, 1.4],
-        [0.9, 1.2, 1.4],
 
         [11.4, 11.2, 10.3],
-        [10.4, 11.4, 9.8],
         [9.7, 9.4, 9.8],
+        [9.7, 10.4, 9.8],
+        [9.7, 11.4, 9.8],
+        [9.7, 12.4, 9.8],
 
         [98.4, 99.7, 95.9],
         [95.4, 97.2, 100.9],
+        [95.4, 97.2, 97.9],
     ]
     cluster_number = 3
-    print(str(ClusterVector([all_vector[0]])))
+    cluster_elements_number = 3
 
-
-
-
-    result = execute(all_vector, cluster_number, EuclideanDistance)
+    # result = execute(all_vector, cluster_number, calculate_method=EuclideanDistance)
+    result = execute(all_vector, cluster_number, cluster_elements_number, EuclideanDistance)
     for vector in result:
         print(str(vector))

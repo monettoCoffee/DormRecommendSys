@@ -55,13 +55,13 @@ def direct_analyse(all_cluster_vector, question_info):
             one_chosen_qid_radio_max_number = max(one_chosen_qid_radio_max_number, radio_choice_times)
         weight_ratio[one_chosen_question_qid] = one_chosen_qid_radio_max_number / len(all_cluster_vector)
 
-    for section_chosen_question_qid in section_chosen_qid_list:
-        person_outside_index = len(all_cluster_vector) - 1
-        while person_outside_index > 0:
-            outside_person = all_cluster_vector[person_outside_index]
-            person_inside_index = person_outside_index - 1
-            while person_inside_index > -1:
-                inside_person = all_cluster_vector[person_inside_index]
+    # for section_chosen_question_qid in section_chosen_qid_list:
+    #     person_outside_index = len(all_cluster_vector) - 1
+    #     while person_outside_index > 0:
+    #         outside_person = all_cluster_vector[person_outside_index]
+    #         person_inside_index = person_outside_index - 1
+    #         while person_inside_index > -1:
+    #             inside_person = all_cluster_vector[person_inside_index]
 
     # todo 应该是越相似的问题权重越小！！！！用1- 一下
     return weight_ratio
