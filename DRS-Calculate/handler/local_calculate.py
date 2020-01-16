@@ -10,7 +10,7 @@ import core.hierarchical_cluster as hierarchical_cluster
 import component.analyse_weigh_ratio as analyse_weight_ratio
 
 
-# 从MySQL读取选择数据
+# 装载数据, 转化数据格式
 def load_data(user_chosen_list, question_info):
     # question_option_dict record every option for create vector
     question_option_dict = {}
@@ -121,12 +121,13 @@ def data_format(all_cluster_vector):
 
 
 def forecast(cluster_number):
+    PLAN_ID = 1
     # 通过计划id获取所有需要进行分析的问题
-    plan_qid_list = QuestionPlanHandler.get_question_plan_by_pid(1).qid
+    plan_qid_list = QuestionPlanHandler.get_question_plan_by_pid(PLAN_ID).qid
     # 通过问题id获取分析问题所需要的信息
     question_info = QuestionHandler.get_question_info_by_qid(plan_qid_list, trans_dict=True)
     # 通过plan id获取本次计划参与的学生
-    user_chosen_list = UserChosenHandler.get_all_user_chosen_by_pid(1)
+    user_chosen_list = UserChosenHandler.get_all_user_chosen_by_pid(PLAN_ID)
 
     # 构建多选题的option与index关系
     question_option_vector_index_dict = load_data(user_chosen_list, question_info)
@@ -136,10 +137,8 @@ def forecast(cluster_number):
 
     # 进行数据标准化处理 todo 需要修改
     data_format(all_cluster_vector)
-    print("all_cluster_vector: " + str(all_cluster_vector))
     # 自动分析问题的权重 Todo 需要修改
     weight_ratio = analyse_weight_ratio.direct_analyse(all_cluster_vector, question_info)
-    print("weight_ratio: " + str(weight_ratio))
     # 构建cluster list
     return
     cluster_list = compound_cluster.init_cluster(all_cluster_vector, weight_ratio)
