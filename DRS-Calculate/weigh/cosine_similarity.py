@@ -13,7 +13,8 @@ class CosineSimilarity:
             numerator += ele1 * ele2
             denominator_vec1 += math.pow(ele1, 2)
             denominator_vec2 += math.pow(ele2, 2)
-        return numerator / (math.sqrt(denominator_vec1) * math.sqrt(denominator_vec2))
+        result = numerator / (math.sqrt(denominator_vec1) * math.sqrt(denominator_vec2))
+        return round(result, 5)
 
 
 if __name__ == "__main__":
