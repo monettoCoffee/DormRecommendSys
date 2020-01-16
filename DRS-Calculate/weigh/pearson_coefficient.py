@@ -15,7 +15,8 @@ class PearsonCoefficient:
             numerator += (ele1 - average_vec1) * (ele2 - average_vec2)
 
         denominator = get_vector_expect(vec1, average_vec1) * get_vector_expect(vec2, average_vec2)
-        return numerator / float(denominator)
+        result = numerator / float(denominator)
+        return round(result, 5)
 
 
 def get_vector_average(vector):

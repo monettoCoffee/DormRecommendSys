@@ -10,7 +10,8 @@ class EuclideanDistance:
         between_distance = 0
         for ele1, ele2 in zip(vec1, vec2):
             between_distance += math.pow((ele1 - ele2), 2)
-        return math.sqrt(between_distance)
+        result = math.sqrt(between_distance)
+        return round(result, 5)
 
 
 if __name__ == "__main__":
