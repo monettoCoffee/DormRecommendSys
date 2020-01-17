@@ -135,12 +135,13 @@ function toPost(url, params, thenFunction, errorFunction) {
     }
     if (typeof(errorFunction) == 'undefined') {
         errorFunction = function(error) {
-            alert("Error!");
+            alert("Error: " + JSON.stringify(error));
         }
     }
     axios.post(url, urlSearchParams).then(
         function(response) {thenFunction(response);}
-    ).catch(
-        function(error) {errorFunction(error);}
-    );
+    )
+//    .catch(
+//        function(error) {errorFunction(error);}
+//    );
 }

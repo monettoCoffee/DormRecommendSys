@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserChosenDao {
 
-    void saveUserChosen(UserChosenDO userChosen);
+    Object saveUserChosen(UserChosenDO userChosen);
 
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.QuestionPlanDao">
+
+    <!-- 数据库中插入新计划 -->
+    <insert id="addNewQuestionPlan">
+        <selectKey resultType="int" order="AFTER" keyProperty="pid">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+            dorm_question_plan
+            (qid_json, plan_name, description, done)
+        VALUES
+            ('[]', #{planName}, #{description}, #{done});
+    </insert>
+
+    <!-- 获取所有注册的学生 -->
+    <select id="getQuestionPlanByPlanName" resultType="com.entry.QuestionPlanDO">
+        SELECT
+            pid,
+            plan_name
+        FROM
+            dorm_question_plan
+        WHERE
+            plan_name = #{planName}
+    </select>
+
+    <!-- 为学生添加选择计划 -->
+    <update id="addPlanToStudent">
+        UPDATE
+            dorm_account
+        SET
+            pid = #{pid}
+        WHERE
+            uid = #{uid};
+    </update>
+
+    <update id="updateQuestionPlan">
+        UPDATE
+            dorm_question_plan
+        SET
+            qid_json = #{qidJson}, plan_name = #{planName}
+        WHERE
+            pid = #{pid};
+    </update>
+
+    <select id="getIncompleteQuestionPlan" resultMap="incompleteQuestionPlanMap">
+        SELECT
+            pid,
+            qid_json AS qid,
+            plan_name
+        FROM
+            dorm_question_plan
+        WHERE
+            done = 0;
+    </select>
+    <resultMap id="incompleteQuestionPlanMap" type="java.util.HashMap">
+        <result property="qid" column="qid" typeHandler="com.config.JsonTypeHandler"/>
+        <result property="planName" column="plan_name" javaType="String"/>
+    </resultMap>
+
+</mapper>

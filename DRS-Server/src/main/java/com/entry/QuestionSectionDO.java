@@ -9,6 +9,16 @@ public class QuestionSectionDO {
     private Integer qid;
     private Integer sid;
     private String selectIntro;
+    private String selectOption;
+    private String sectionJson;
+
+    public String getSectionJson() {
+        return sectionJson;
+    }
+
+    public void setSectionJson(String sectionJson) {
+        this.sectionJson = sectionJson;
+    }
 
     public Integer getQid() {
         return qid;
@@ -42,7 +52,6 @@ public class QuestionSectionDO {
         this.selectOption = selectOption;
     }
 
-    private String selectOption;
 
     @Override
     public String toString() {

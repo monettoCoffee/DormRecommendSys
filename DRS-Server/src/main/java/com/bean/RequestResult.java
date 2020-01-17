@@ -25,24 +25,27 @@ public class RequestResult {
         return serviceCode;
     }
 
-    public void setServiceCode(int serviceCode) {
+    public RequestResult setServiceCode(int serviceCode) {
         this.serviceCode = serviceCode;
+        return this;
     }
 
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public RequestResult setMsg(String msg) {
         this.msg = msg;
+        return this;
     }
 
     public Object getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public RequestResult setResult(Object result) {
         this.result = result;
+        return this;
     }
 
     public static RequestResult success() {

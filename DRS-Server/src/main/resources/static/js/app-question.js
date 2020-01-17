@@ -1,6 +1,8 @@
 var app = new Vue({
     el: ".questionContainer",
     data: {
+        // 用户类型
+        userType: null,
         // 可选择的与选择数量的对应关系
         questionChoseType: {
             1: "单选",
@@ -177,8 +179,15 @@ var app = new Vue({
             }
             alert(JSON.stringify(params))
             toPost("chosen", params, then)
-;        }
-
+        ;},
+        deleteQuestion: function(qid) {
+            alert("删除问题！" + qid);
+            then = function(response) {
+                var data = JSON.parse(JSON.stringify(response.data))
+                alert(JSON.stringify(data));
+                location.reload();
+            }
+            toPost("delete/question", {"qid": qid}, then)
+        }
     }
 })
-
