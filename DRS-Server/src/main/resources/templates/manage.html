@@ -15,15 +15,15 @@
         <div class="controlElement">
             <div class="shutdown icon" onclick="alert('注销')"></div>
         </div>
-        <div class="manageElement select">
+        <div class="manageElement select" v-if="false">
             <div class="navigate icon"><i></i></div>
             <span>添加问题类别</span>
         </div>
-        <div class="manageElement">
+        <div class="manageElement" v-if="false">
             <div class="float icon"><i></i></div>
             <span>管理问题类别</span>
         </div>
-        <div class="manageElement  select">
+        <div class="manageElement">
             <div class="tag icon"></div>
             <span>添加问卷问题</span>
         </div>
@@ -50,76 +50,211 @@
     </div>
     <div class="manageMonitor">
         <div class="manageCard">
-            <div class="monitorTitle">添加问题类别</div>
+            <div class="monitorTitle">计划问题管理</div>
+            <div class="beforeInput" @click="alert(planQuestionPlanCurrentIndex)">
+                选择计划名称:
+            </div>
+            <select v-model="planQuestionPlanCurrentIndex">
+                <option v-for="(plan, pIndex) in planQuestionPlanInfoList" :value="pIndex">{{plan.planName}}</option>
+            </select>
+            <div class="beforeInput" @click="alert(planQuestionAddQuestionQid)">
+                添加问题:
+            </div>
+            <select v-model="planQuestionAddQuestionQid">
+                <option :value="questionInfo.qid" v-for="(questionInfo, qIndex) in planQuestionQuestionInfoList">
+                    {{questionInfo.qid}},{{questionInfo.introduction}}
+                </option>
+            </select>
+            <input style="margin-left: 30px;margin-top: -3px" type="button" value="添加问题" @click="questionPlanAddQuestionToPlan()">
+            <div class="questionAnswerArea">
+                <div class="selectResult">
+                    <div class="chosenGroup" v-for="(planChosenQuestion, qIndex) in planQuestionPlanInfoList[planQuestionPlanCurrentIndex]['qid']">
+                        <span>{{planChosenQuestion}}</span>
+                        <div class="removeIcon" @click="questionPlanDeleleQuestionFromPlan(qIndex)">
+                            <div class="remove icon"></div>
+                        </div>
+                    </div>
+                </div>
+            </div><br><br>
+            <input style="margin-top: -3px" type="button" value="确认计划" @click="questionPlanConfirmPlan()">
+        </div>
+        <div class="manageCard">
+            <div class="monitorTitle" v-if="addPlanShow">添加选择计划</div>
+            <div style="margin-bottom: 20px;">
+                <div class="beforeInput">新增计划名称:</div>
+                <input type="text" style="width: 100px;" v-model="addPlanName">
+                <input style="margin-left: 30px;margin-top: -3px" type="button" value="制定计划" @click="addPlanToDatabase()">
+            </div>
+            <div style="margin-bottom: 10px" v-for="(studentInfo, sIndex) in studentInfoList">
+                <div class="beforeInput">姓名: {{studentInfo.name}}</div>
+                <div class="beforeInput" v-if="studentInfo.sex==0">性别: 男</div>
+                <div class="beforeInput" v-if="studentInfo.sex==1">性别: 女</div>
+                <div class="beforeInput">学号: {{studentInfo.uid}}</div>
+                <div class="beforeInput" v-if="studentInfo.planName!=''">计划状态: {{studentInfo.planName}}</div>
+                <div class="beforeInput" v-if="studentInfo.planName==''">计划状态: 未参加计划</div>
+                <input style="margin-left: 30px;margin-top: -3px" type="button" value="参加或更改计划" @click="addStudentToPlan(studentInfo.uid, sIndex)">
+                <input style="margin-left: 30px;margin-top: -3px" type="button" value="退出计划" @click="deleteStudentFromPlan(studentInfo.uid, sIndex)" v-if="studentInfo.planName!=''">
+            </div>
+        </div>
+        <div class="manageCard">
+            <div class="monitorTitle">学生添加管理</div>
+            <div style="margin-bottom: 20px;">
+                <div class="beforeInput">新增学生姓名:</div>
+                <input type="text" v-model="addStudentName">
+                <div class="beforeInput">新增学生学号:</div>
+                <input type="text" v-model="addStudentUid">
+                <div class="beforeInput">新增学生性别:</div>
+                <select v-model="addStudentSex">
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                </select>
+                <input style="margin-left: 30px;margin-top: -3px" type="button" value="新增" @click="addStudentToDatabase()">
+            </div>
+            <div style="margin-bottom: 10px" v-for="(studentInfo) in studentInfoList">
+                <div class="beforeInput">姓名: {{studentInfo.name}}</div>
+                <div class="beforeInput" v-if="studentInfo.sex==0">性别: 男</div>
+                <div class="beforeInput" v-if="studentInfo.sex==1">性别: 女</div>
+                <div class="beforeInput">学号: {{studentInfo.uid}}</div>
+                <div class="beforeInput" v-if="studentInfo.userType==0">注册状态: 未注册</div>
+                <div class="beforeInput" v-if="studentInfo.userType==1">注册状态: 已注册</div>
+                <input style="margin-left: 30px;margin-top: -3px" type="button" value="删除" @click="deleteStudentFromDatabase(studentInfo.uid)">
+            </div>
+        </div>
+        <div class="manageCard" v-if="true">
+            <div class="monitorTitle">添加问卷问题</div>
             <div class="questionOption">
-                <span>1,&nbsp;问题类型?</span>
+                <span @click="alert(app.addQuestionType)">1,&nbsp;问题类型?</span>
                 <label>
-                    <input type="radio" name="questionType" value="one_chosen">
+                    <input type="radio" name="questionType" value="one_chosen" v-model="addQuestionType">
                     &nbsp;单选
                 </label>
                 <label>
-                    <input type="radio" name="questionType" value="one_chosen">
+                    <input type="radio" name="questionType" value="multi_chosen"v-model="addQuestionType">
                     &nbsp;多选
                 </label>
                 <label>
-                    <input type="radio" name="questionType" value="section_chosen">
+                    <input type="radio" name="questionType" value="section_chosen" v-model="addQuestionType">
                     &nbsp;区间选择
                 </label>
             </div>
             <div class="questionOption">
-                <span>2,&nbsp;是否配置附加答案?</span>
+                <span @click="alert(app.addQuestionHasExtraAnswer)">2,&nbsp;是否配置附加答案?</span>
                 <label>
-                    <input type="radio">
+                    <input type="radio" name="extraAnswer" value="no" v-model="addQuestionHasExtraAnswer">
                     &nbsp;无附加答案
                 </label>
                 <label>
-                    <input type="radio">
+                    <input type="radio" name="extraAnswer" value="yes" v-model="addQuestionHasExtraAnswer">
                     &nbsp;带有附加答案
                 </label>
+                <div class="beforeInput">附加项描述:</div><input type="text" v-model="addQuestionExtraIntro">
+                <br>
+                <div class="beforeInput" v-model="addQuestionExtraPlaceholder">附加项提示:</div><input type="text">
+                <br>
+                <div class="beforeInput" v-model="addQuestionExtraDefaultValue">附加项默认值:</div><input type="text">
+                <br>
+                <div class="beforeInput" v-if="addQuestionType!='one_chosen'" v-model="addQuestionExtraAddButtonValue">附加项增加按钮:
+                </div>
+                <input type="text" v-if="addQuestionType!='one_chosen'">
             </div>
-            <div class="questionOption">
-                <span>3,&nbsp;最多允许选择几项?</span>
+            <div class="questionOption" v-if="addQuestionType!='one_chosen'">
+                <span @click="alert(app.addQuestionMultiChosenNumber)">3,&nbsp;最多允许选择几项?</span>
                 <label>
-                    <input type="radio">
-                    &nbsp;单选
-                </label>
-                <label>
-                    <input type="radio">
+                    <input type="radio" v-model="addQuestionMultiChosenNumber" value="2">
                     &nbsp;双选
                 </label>
                 <label>
-                    <input type="radio">
+                    <input type="radio" v-model="addQuestionMultiChosenNumber" value="3">
                     &nbsp;三选
                 </label>
                 <label>
-                    <input type="radio">
+                    <input type="radio" v-model="addQuestionMultiChosenNumber" value="-1">
                     &nbsp;不限多选
                 </label>
             </div>
             <div class="questionOption">
-                <span>4,&nbsp;问题的题目是什么?</span>
-                <div class="beforeInput">题目:</div><input type="text">
+                <span @click="alert(app.addQuestionTitle)">4,&nbsp;问题的题目是什么?</span>
+                <div class="beforeInput">题目:</div><input type="text" v-model="addQuestionTitle">
             </div>
             <div class="questionOption">
-                <span>5,&nbsp;问题有相应的提示吗?&nbsp;(如无则空)</span>
-                <div class="beforeInput">提示:</div><input type="text">
+                <span @click="alert(app.addQuestionTips)">5,&nbsp;问题有相应的提示吗?&nbsp;(如无则空)</span>
+                <div class="beforeInput">提示:</div><input type="text" v-model="addQuestionTips">
             </div>
-            <div class="questionOption">
+            <div class="questionOption" v-if="addQuestionType!='section_chosen'">
                 <span>6,&nbsp;问题有哪些选项?&nbsp;</span>
-                <div class="beforeInput">选项:</div><input type="text">
-                <input type="button" value="添加">
+                <div class="beforeInput">选项:</div><input type="text" v-model="addQuestionChosenInput">
+                <input type="button" value="添加" @click="addQuestionChosenToGroup()">
                 <div class="questionAnswerArea">
                     <div class="selectResult">
-                        <div class="chosenGroup">
-                            <span>"12321"</span>
-                            <div class="removeIcon">
+                        <div class="chosenGroup" v-for="(chosen, cid) in addQuestionChosenGroup">
+                            <span>{{chosen}}</span>
+                            <div class="removeIcon" @click="removeQuestionChosenFromGroup('addQuestionChosenGroup' ,cid)">
                                 <div class="remove icon"></div>
                             </div>
                         </div>
                     </div>
-                
                 </div>
+            </div><br>
+            <div class="questionOption"  v-if="addQuestionType=='section_chosen'">
+                <span @click="alert(app.addQuestionUpSectionInput)">7,&nbsp;上区间有哪些选项?&nbsp;</span>
+                <div class="beforeInput">区间描述:</div>
+                <input type="text" value="" v-model="addQuestionUpSelectIntro"><br>
+                <div class="beforeInput">上区间:</div>
+                <input type="text" v-model="addQuestionUpSectionInput">
+                <input type="button" value="添加" @click="addQuestionUpSectionFunction()">
+                <div class="questionAnswerArea">
+                    <div class="selectResult">
+                        <div class="chosenGroup"  v-for="(upSectionElement, usid) in addQuestionUpSection">
+                            <span>{{upSectionElement}}</span>
+                            <div class="removeIcon" @click="removeQuestionChosenFromGroup('addQuestionUpSection' ,usid)">
+                                <div class="remove icon"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <div class="questionOption" v-if="addQuestionType=='section_chosen'">
+                <span @click="alert(app.addQuestionDownSectionInput)">7,&nbsp;下区间有哪些选项?&nbsp;</span>
+                <div class="beforeInput">区间描述:</div>
+                <input type="text" value="" v-model="addQuestionDownSelectIntro"><br>
+                <div class="beforeInput">下区间:</div><input type="text" v-model="addQuestionDownSectionInput">
+                <input type="button" value="添加" @click="addQuestionDownSectionFunction()"><br>
+                <div class="questionAnswerArea">
+                    <div class="selectResult">
+                        <div class="chosenGroup" v-for="(downSectionElement, udid) in addQuestionDownSection">
+                            <span>{{downSectionElement}}</span>
+                            <div class="removeIcon" @click="removeQuestionChosenFromGroup('addQuestionDownSection' ,udid)">
+                                <div class="remove icon"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <div class="questionOption" v-if="addQuestionType!='one_chosen'">
+                <span @click="alert(app.addQuestionChosenStress)">2,&nbsp;是否答案可以强调选项?</span>
+                <label>
+                    <input type="radio" name="stressChosen" value="yes" v-model="addQuestionChosenStress">
+                    &nbsp;可以强调选项
+                </label>
+                <label>
+                    <input type="radio" name="stressChosen" value="no" v-model="addQuestionChosenStress">
+                    &nbsp;不可以强调选项
+                </label>
             </div>
+            <div class="questionOption">
+                <span @click="alert(app.addQuestionAutoWeightRatio)">2,&nbsp;问题权重分析方式?</span>
+                <label>
+                    <input type="radio" name="weightRatio" value="yes" v-model="addQuestionAutoWeightRatio">
+                    &nbsp;自动分析问题权重
+                </label>
+                <label>
+                    <input type="radio" name="weightRatio" value="no" v-model="addQuestionAutoWeightRatio">
+                    &nbsp;不自动分析
+                </label>
+                <div class="beforeInput">预设权重:</div><input type="text" value="" v-model="addQuestionDefaultWeight">
+            </div>
+            <input type="button" style="margin-left: 15%" value="重置" onclick="location.reload()">
+            <input type="button" style="margin-left: 30%" value="提交" @click="addQuestionToDatabase()">
         </div>
     </div>
 </div>
@@ -128,23 +263,5 @@
 <script src="js/library.js"></script>
 <script src="js/app-manage.js"></script>
 <script src="js/action-manage.js"></script>
-<script>
-    var app = new Vue({
-        el: ".manageContainer",
-        data: {
-            // 模态框的基本属性
-            modelData: {
-                info: "info",
-                title: "title",
-                modelShow: false,
-                backgroundShow: false,
-                modelStyle: "",
-            },
-        },
-        methods: {
-
-        }
-    });
-</script>
 </body>
 </html>

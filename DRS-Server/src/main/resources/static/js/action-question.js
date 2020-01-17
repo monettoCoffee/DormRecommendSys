@@ -1,6 +1,7 @@
 function initial() {
-    getDynamicData();
-    //getStaticData();
+//    getDynamicData();
+    getStaticData();
+    getPermission();
 }
 
 // 从后端获取动态数据
@@ -162,6 +163,17 @@ function getStaticData() {
     ]
     formatQuestionData(questionData);
     app.questionData = questionData;
+}
+
+// 获取用户类型与权限
+function getPermission() {
+    then = function(response) {
+        var data = JSON.parse(JSON.stringify(response.data))
+        if (data.serviceCode == 2000) {
+            app.userType = 2;
+        }
+    }
+    toPost("permission", {}, then);
 }
 
 window.onload = function() {

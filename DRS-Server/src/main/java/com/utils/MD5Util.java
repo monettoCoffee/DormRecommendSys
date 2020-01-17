@@ -17,10 +17,10 @@ public class MD5Util {
 
     public static void main(String[] args) {
         String str = "This is origin String";
-        System.out.println("Origin str: " + str);
+        System.out.print("Origin str: " + str + "\n");
         String md5Str = MD5Util.get(str);
-        System.out.println("Trans to MD5: " + md5Str);
-        System.out.println("Trans compare: " + md5Str.equals(MD5Util.get(str)));
+        System.out.print("Trans to MD5: " + md5Str + "\n");
+        System.out.print("Trans compare: " + md5Str.equals(MD5Util.get(str)) + "\n");
     }
 
 }

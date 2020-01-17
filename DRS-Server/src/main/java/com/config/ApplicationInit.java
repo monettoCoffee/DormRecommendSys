@@ -34,22 +34,19 @@ public class ApplicationInit implements ApplicationListener<ContextRefreshedEven
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         clearRedisCache();
         initRedisCache();
-        System.out.println("DRS: Server Module Boot Successful!");
+        System.out.print("DRS: Server Module Boot Successful!" + "\n");
     }
 
-    public void clearRedisCache() {
+    private void clearRedisCache() {
         if (clearRedisCacheAtStartup && useRedisCache) {
-            this.redisTemplate.execute(new RedisCallback<String>() {
-                @Override
-                public String doInRedis(RedisConnection connection) {
-                    connection.flushDb();
-                    return null;
-                }
+            this.redisTemplate.execute((RedisCallback<String>) connection -> {
+                connection.flushDb();
+                return null;
             });
         }
     }
 
-    public void initRedisCache() {
+    private void initRedisCache() {
         if (useRedisCache) {
             String localAddress = "Unknown";
             try {

@@ -1,0 +1,161 @@
+q<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/style-login.css" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+    <transition name="panel-trans">
+        <div class="login-panel" v-show="transShow" :style="panelHeight">
+        <span class="login-title">
+            <span style="margin-left: 65px; float: left;margin-top: 35px;">
+                学生寝室分配系统
+            </span>
+        </span>
+            <!-- 登录界面 -->
+            <div v-show="now!='reg'" :style="transOpacity">
+                <div class="input-group" v-show="now=='login'">
+                    <label class="profile icon"></label>
+                    <input class="login-item" type="text" placeholder="用户名">
+                </div>
+                <div class="input-group" v-show="now=='login'">
+                    <label class="unlock icon"></label>
+                    <input class="login-item" type="password" placeholder="密 码">
+                </div>
+                <div class="input-group" v-show="now=='login'">
+                    <div class="remeberMe">
+                        <div style="margin-top: 58px;margin-left: 65px;display: inline-block;position: absolute;">
+                            <input type="checkbox" class="remt">
+                            <span onclick="domClass('remt').checked=!domClass('remt').checked;" style="cursor:pointer;">自动登录</span>
+                            <a style="margin-left: 10px;" @click="now='find'">忘记账号</a>
+                        </div>
+                        <input type="submit" value="登录" @click="login()">
+                        <input type="button" value="注册" @click="transReg()">
+                    </div>
+                </div>
+                <!-- 找回账号界面 -->
+                <div class="input-group" v-show="now=='find'">
+                    <label class="input-label mobile-solid icon" style="margin-left: 86px;"></label>
+                    <input class="login-item" type="text" placeholder="手机号码" onchange="app.findChange()">
+                </div>
+                <div class="input-group" v-show="now=='find'">
+                    <label class="input-label mail icon" style="margin-left: 86px;"></label>
+                    <input class="login-item" type="password" placeholder="电子邮箱" onchange="app.findChange()">
+                </div>
+                <div class="input-group" v-show="now=='find'">
+                    <div class="remeberMe">
+                        <div style="margin-top: 58px;margin-left: 65px;display: inline-block;position: absolute;">
+                            <a style="margin-left: 10px;" @click="appeal()">申诉</a>
+                        </div>
+                        <input class="findButton" type="button" value="找回" disabled="" @click="find()" :style="findButtonStyle">
+                        <input type="button" value="返回" @click="now='login'">
+                    </div>
+                </div>
+            </div>
+            <!-- 注册界面 -->
+            <div style="margin-top: 30px;" v-show="now=='reg'" :style="transOpacity">
+                <div class="input-group">
+                    <label class="input-label profile icon" style="margin-left: 140px;"></label>
+                    <input class="register-item account" type="text" placeholder="用户名">
+                </div>
+                <div class="input-group">
+                    <label class="input-label mobile-solid icon"></label>
+                    <input class="register-item phone" type="text" placeholder="手机号码">
+                </div>
+                <div class="input-group">
+                    <label class="input-label unlock icon" style="margin-left: 140px;"></label>
+                    <input class="register-item password" type="password" placeholder="密码">
+                </div>
+                <div class="input-group">
+                    <label class="input-label left-align icon"></label>
+                    <input class="register-item numid" type="text" placeholder="学号">
+                </div>
+                <div class="input-group">
+                    <label class="input-label mail icon"></label>
+                    <input class="register-item email" type="text" placeholder="电子邮箱">
+                </div>
+                <div class="input-group" style="margin-top: -20px;">
+                    <input type="submit" value="注册" @click="registerStudentAccount()">
+                    <input type="button" value="返回" @click="transReg()" >
+                </div>
+                <div style="height: 120px;"></div>
+            </div>
+            <!-- 修改密码界面 -->
+            <div style="margin-top: 30px;" v-show="now=='alterPassword'" :style="transOpacity">
+                <div class="input-group" style="margin-top: 100px;">
+                    <label class="unlock icon"></label>
+                    <input class="login-item newPassword" type="password" placeholder="新密码" style="margin-top: -60px;">
+                    <label class="input-label mail icon" style="margin-left: 86px;margin-top: 57px;"></label>
+                    <input class="login-item interceptor" type="text" placeholder="邮箱验证码" style="margin-top: 40px;">
+                </div>
+                <div class="input-group" style="margin-top: 50px;">
+                    <input type="submit" value="确认修改" @click="alterPass()" style="margin-top: 10px;">
+                    <input type="button" value="返回" @click="now='login'" style="margin-top: 10px;">
+                </div>
+                <div style="height: 120px;"></div>
+            </div>
+        </div>
+    </transition>
+    <!-- 模态框半透明黑色背景 -->
+    <transition name="model-trans">
+        <div class="model-background" @click="hiddenModel()" v-show="backgroundShow"></div>
+    </transition>
+    <!-- 模态框 -->
+    <transition name="model-trans">
+        <div class="model-panel" v-show="modelShow" :style="modelStyle">
+            <span>{{title}}</span>
+            <p>{{info}}</p>
+            <input type="button" value="好的" @click="hiddenModel()">
+        </div>
+    </transition>
+    <!-- 页面加载动画半透明黑色背景 -->
+    <transition name="load-trans">
+        <div class="" v-show="loadingShow" style="position: absolute;width: 100%;height: 100%;background-color: rgba(0,0,0,0.4);z-index:200;"></div>
+    </transition>
+    <!-- 界面加载转圈动画 -->
+    <transition name="load-trans">
+        <div class="loading" v-show="loadingShow" style="z-index:200;">
+            <svg><g class="g-circles">
+                <circle transform="translate(35, 16.7) rotate(-30) translate(-35, -16.7) " cx="35" cy="16.7" r="10"></circle>
+                <circle transform="translate(16.7, 35) rotate(-60) translate(-16.7, -35)" cx="16.7" cy="35" r="10"></circle>
+                <circle transform="translate(10, 60) rotate(-90) translate(-10, -60) " cx="10" cy="60" r="10"></circle>
+                <circle transform="translate(16.7, 85) rotate(-120) translate(-16.7, -85) " cx="16.7" cy="85" r="10"></circle>
+                <circle id="8" transform="translate(35, 103.3) rotate(-150) translate(-35, -103.3) " cx="35" cy="103.3" r="10"></circle>
+                <circle cx="60" cy="110" r="10"></circle>
+                <circle transform="translate(85, 103.3) rotate(-30) translate(-85, -103.3) " cx="85" cy="103.3" r="10"></circle>
+                <circle transform="translate(103.3, 85) rotate(-60) translate(-103.3, -85) " cx="103.3" cy="85" r="10"></circle>
+                <circle transform="translate(110, 60) rotate(-90) translate(-110, -60) " cx="110" cy="60" r="10"></circle>
+                <circle transform="translate(103.3, 35) rotate(-120) translate(-103.3, -35) " cx="103.3" cy="35" r="10"></circle>
+                <circle transform="translate(85, 16.7) rotate(-150) translate(-85, -16.7) " cx="85" cy="16.7" r="10"></circle>
+                <circle cx="60" cy="10" r="10"></circle>
+            </g></svg>
+        </div>
+    </transition>
+    <!-- 背景轮播图 -->
+    <div class="backgroundPic">
+        <transition name="fade">
+            <div v-if="backgroundPic1">
+                <img src="img/backgroundPic1.jpg">
+            </div>
+        </transition>
+        <transition name="fade">
+            <div v-if="backgroundPic2">
+                <img src="img/backgroundPic2.jpg">
+            </div>
+        </transition>
+        <transition name="fade">
+            <div v-if="backgroundPic3">
+                <img src="img/backgroundPic3.jpg">
+            </div>
+        </transition>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script src="js/library.js"></script>
+<script src="js/app-login.js"></script>
+<script src="js/action-login.js"></script>
+</body>
+</html>

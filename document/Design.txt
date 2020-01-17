@@ -1,4 +1,6 @@
 Todo
+    记录历史选择计划，新增选择计划不可与历史已完成选择计划相同
+    0. H_C在有多组 两两之间 相似度相差为 极小值n 时, 优先合并Cluster数量较少者
     1. H_C计算时降低时间复杂度, 采用dict, key为uid, 合并后即更新
     2. weight_ratio 加入所有问题的权重, 如果自动分析+事先定义权重, 则取二者平均值
     3. weight_ratio 当自动分析权重后, 如果权重是 0 则说明选项相同, 计算无意义, 排除那个Chosen(Vector)
@@ -31,6 +33,7 @@ Redis:
 数据库:
     库名: dorm
     表:
+        dorm_account 用户表
         dorm_question 问题的题干
         dorm_question_extra 问题的附加部分
         dorm_question_direction 问题的语义种类分类
@@ -51,12 +54,17 @@ Redis:
         dorm_question.choose_type: 问题选择数量
             1: 单选
             2: 最多选择两项
-            0: 可多选
+            0: 不限制选择项
         dorm_question.did: 问题方向属性
             0: 学习习惯
             1: 生活习惯
             2: 个人爱好
             3: 寝室属性
+
+        dorm_account.user_type: 用户类型
+            0: 录入系统, 但未完成注册
+            1: 已经完成注册
+            2: 系统管理员
 
 Q & A:
     Q: 为什么要用缓存机制, 不直接存在MySQL里面?

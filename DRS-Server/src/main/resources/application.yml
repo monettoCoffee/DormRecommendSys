@@ -1,7 +1,4 @@
 application:
-  interceptor:
-    # 拦截器放行url
-    header-token-interceptor: /css/**,/js/**,/static/**,
   cache:
     # 是否使用本地弱引用缓存
     useLocalCache: true
@@ -9,10 +6,18 @@ application:
     useRedisCache: false
     # 是否在启动时清空Redis缓存:
     clearRedisCacheAtStartup: true
+  token:
+    # Token有效时间, 单位秒
+    keep-time: 1296000
+    # Json Web Token 秘钥
+    secretKey: D_R_S/
 
 server:
   # 服务默认端口
   port: 8080
+  interceptor:
+    # 拦截器放行url
+    exclude-path-patterns: /test,/login,/register/**,/js/**,/css/**,/img/**
 
 spring:
   thymeleaf:

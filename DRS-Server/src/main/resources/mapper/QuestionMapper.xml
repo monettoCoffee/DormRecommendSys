@@ -57,9 +57,13 @@
         <result property="extAddButtonValue" column="ext_add_button_value" javaType="String"/>
     </resultMap>
 
+    <select id="getAllFrontQuestionQid" resultType="Integer">
+        SELECT qid FROM dorm_question
+    </select>
+
 
     <!-- Get one entry by id -->
-    <select id="getQuestionByQid" resultType="com.entry.QuestionBodyDO">
+    <select id="getQuestionByQid" resultType="com.entry.QuestionDO">
         SELECT * FROM dorm_question WHERE qid = #{qid};
     </select>
 
@@ -73,7 +77,7 @@
 
 
     <!-- Get entry list by id -->
-    <select id="getQuestionListByQid" resultType="com.entry.QuestionBodyDO">
+    <select id="getQuestionListByQid" resultType="com.entry.QuestionDO">
         SELECT * FROM dorm_question WHERE qid IN
         <foreach collection="list" item="qid" index="index" open="(" close=")" separator=",">
             #{qid}
@@ -94,4 +98,53 @@
         </foreach>
     </select>
 
+    <insert id="addQuestionToDatabase">
+        <selectKey resultType="int" order="AFTER" keyProperty="qid">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        dorm_question
+        (tips, introduction, display_type, choose_type, option_json, question_type, did, auto_weight, weight)
+        VALUES
+        (#{tips}, #{introduction}, #{displayType}, #{chooseType}, #{optionJson}, #{questionType}, #{did}, #{autoWeight}, #{weight});
+    </insert>
+    <insert id="addQuestionSectionToDatabase">
+        INSERT INTO
+        dorm_question_section
+        (qid, section_json)
+        VALUES
+        (#{qid}, #{sectionJson});
+    </insert>
+    <insert id="addQuestionExtraToDatabase">
+        INSERT INTO
+        dorm_question_extra
+        (qid, ext_intro, ext_placeholder, ext_default_value, ext_add_button_value)
+        VALUES
+        (#{qid}, #{extIntro}, #{extPlaceholder}, #{extDefaultValue}, #{extAddButtonValue});
+    </insert>
+    <delete id="deleteQuestionFromDatabase">
+        DELETE FROM
+        dorm_question
+        WHERE
+        qid = #{qid}
+    </delete>
+    <delete id="deleteQuestionExtraFromDatabase">
+        DELETE FROM
+        dorm_question_extra
+        WHERE
+        qid = #{qid}
+    </delete>
+    <delete id="deleteQuestionSectionFromDatabase">
+        DELETE FROM
+        dorm_question_section
+        WHERE
+        qid = #{qid}
+    </delete>
+
+    <select id="getAllQuestionIntroduction" resultType="com.entry.QuestionDO">
+        SELECT
+            *
+        FROM
+            dorm_question
+    </select>
 </mapper>

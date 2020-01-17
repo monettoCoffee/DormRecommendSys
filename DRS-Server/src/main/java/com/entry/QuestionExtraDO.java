@@ -10,6 +10,24 @@ public class QuestionExtraDO {
     private Integer qid;
     private String extIntro;
     private String extPlaceholder;
+    private String extDefaultValue;
+    private String extAddButtonValue;
+
+    public void setEid(Integer eid) {
+        this.eid = eid;
+    }
+
+    public void setQid(Integer qid) {
+        this.qid = qid;
+    }
+
+    public String getExtAddButtonValue() {
+        return extAddButtonValue;
+    }
+
+    public void setExtAddButtonValue(String extAddButtonValue) {
+        this.extAddButtonValue = extAddButtonValue;
+    }
 
     public int getEid() {
         return eid;
@@ -51,7 +69,6 @@ public class QuestionExtraDO {
         this.extDefaultValue = extDefaultValue;
     }
 
-    private String extDefaultValue;
 
     @Override
     public String toString() {

@@ -11,12 +11,6 @@
 -- ---------------------------------------------------------
 
 
--- CREATE DATABASE "dorm" ----------------------------------
-CREATE DATABASE IF NOT EXISTS `dorm` CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `dorm`;
--- ---------------------------------------------------------
-
-
 -- CREATE TABLE "dorm_question" --------------------------------
 CREATE TABLE `dorm_question` ( 
 	`qid` Int( 255 ) AUTO_INCREMENT NOT NULL,
@@ -28,12 +22,12 @@ CREATE TABLE `dorm_question` (
 	`question_type` TinyInt( 255 ) NOT NULL,
 	`did` Int( 255 ) NOT NULL,
 	`auto_weight` TinyInt( 4 ) NOT NULL DEFAULT 1,
-	`weight` Double( 22, 0 ) NOT NULL DEFAULT -1,
+	`weight` Double( 22, 5 ) NOT NULL DEFAULT -1.00000,
 	CONSTRAINT `unique_uk_qid` UNIQUE( `qid` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 8;
+AUTO_INCREMENT = 7;
 -- -------------------------------------------------------------
 
 
@@ -47,7 +41,7 @@ CREATE TABLE `dorm_user_chosen` (
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 72;
+AUTO_INCREMENT = 76;
 -- -------------------------------------------------------------
 
 
@@ -63,7 +57,25 @@ CREATE TABLE `dorm_question_extra` (
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 4;
+AUTO_INCREMENT = 3;
+-- -------------------------------------------------------------
+
+
+-- CREATE TABLE "dorm_account" ---------------------------------
+CREATE TABLE `dorm_account` ( 
+	`uid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`account` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`password` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`mail` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`phone` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`user_type` TinyInt( 255 ) NOT NULL,
+	`name` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`sex` TinyInt( 255 ) NOT NULL,
+	`pid` Int( 255 ) NOT NULL,
+	CONSTRAINT `unique_uid` UNIQUE( `uid` ) )
+CHARACTER SET = utf8
+COLLATE = utf8_general_ci
+ENGINE = InnoDB;
 -- -------------------------------------------------------------
 
 
@@ -76,7 +88,7 @@ CREATE TABLE `dorm_question_section` (
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 4;
+AUTO_INCREMENT = 5;
 -- -------------------------------------------------------------
 
 
@@ -105,18 +117,19 @@ CREATE TABLE `dorm_question_plan` (
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 2;
+AUTO_INCREMENT = 8;
 -- -------------------------------------------------------------
 
 
 -- Dump data of "dorm_question" ----------------------------
 INSERT INTO `dorm_question`(`qid`,`tips`,`introduction`,`display_type`,`choose_type`,`option_json`,`question_type`,`did`,`auto_weight`,`weight`) VALUES 
-( '1', '情根据您的个人习惯进行选择哦!', '我的学习方式?', '0', '1', '["独自学习","共同学习","都可以"]', '1', '0', '1', '-1' ),
-( '2', '可以选择优先和老乡一个寝室!', '我们来自哪里?', '1', '1', '["同样的城市","不同的城市","都可以"]', '1', '0', '1', '-1' ),
-( '3', '我们会为您分配作息时间相似的同学!', '我们的就寝时间?', '2', '0', NULL, '3', '0', '1', '-1' ),
-( '4', '大家一起玩才有趣!', '我的爱好有哪些?', '3', '2', '["篮球","羽毛球"]', '2', '0', '1', '-1' ),
-( '5', '这是大家想要的寝室的模样!', '你希望寝室是什么样子的?', '6', '2', '["热闹","安静","整洁明亮","归属感"]', '2', '0', '1', '-1' ),
-( '6', NULL, '你不希望寝室是什么样子的?', '6', '3', '["吵闹","冷清","杂乱","异味","阴暗","沉迷游戏"]', '2', '0', '1', '-1' );
+( '1', '情根据您的个人习惯进行选择哦!', '我的学习方式?', '0', '1', '["独自学习","共同学习","都可以"]', '1', '0', '1', '-1.00000' ),
+( '2', '可以选择优先和老乡一个寝室!', '我们来自哪里?', '1', '1', '["同样的城市","不同的城市","都可以"]', '1', '0', '1', '-1.00000' ),
+( '3', '我们会为您分配作息时间相似的同学!', '我们的就寝时间?', '2', '0', NULL, '3', '0', '1', '-1.00000' ),
+( '4', '大家一起玩才有趣!', '我的爱好有哪些?', '3', '2', '["篮球","羽毛球"]', '2', '0', '1', '-1.00000' ),
+( '5', '这是大家想要的寝室的模样!', '你希望寝室是什么样子的?', '6', '2', '["热闹","安静","整洁明亮","归属感"]', '2', '0', '1', '-1.00000' ),
+( '6', NULL, '你不希望寝室是什么样子的?', '6', '3', '["吵闹","冷清","杂乱","异味","阴暗","沉迷游戏"]', '2', '0', '1', '-1.00000' ),
+( '7', '单选提示1', '单选题目1', '1', '1', '["单选选项1","单选选项2"]', '1', '0', '1', '0.50000' );
 -- ---------------------------------------------------------
 
 
@@ -132,13 +145,25 @@ INSERT INTO `dorm_user_chosen`(`cid`,`uid`,`chosen_json`,`pid`) VALUES
 -- Dump data of "dorm_question_extra" ----------------------
 INSERT INTO `dorm_question_extra`(`eid`,`qid`,`ext_intro`,`ext_placeholder`,`ext_default_value`,`ext_add_button_value`) VALUES 
 ( '1', '2', '我来自', '格式: xxx省/xxx市', '辽宁省/沈阳市', '' ),
-( '2', '4', '其他爱好', '爱好', '', '添加' );
+( '2', '4', '其他爱好', '爱好', '', '添加' ),
+( '3', '7', '单选测试描述1', 'eph', 'eph', 'eav' );
+-- ---------------------------------------------------------
+
+
+-- Dump data of "dorm_account" -----------------------------
+INSERT INTO `dorm_account`(`uid`,`account`,`password`,`mail`,`phone`,`user_type`,`name`,`sex`,`pid`) VALUES 
+( '0001', '123', '202cb962ac59075b964b07152d234b70', '123', '123', '2', 'ads1', '1', '0' ),
+( '001', '', '', '', '', '0', 'n1', '1', '0' ),
+( 'dsds1', '', '', '', '', '0', 'ads4', '1', '6' ),
+( 'dsds2', '', '', '', '', '0', 'ads5', '0', '7' ),
+( 'dsds5', '', '', '', '', '0', 'ads6', '1', '5' );
 -- ---------------------------------------------------------
 
 
 -- Dump data of "dorm_question_section" --------------------
 INSERT INTO `dorm_question_section`(`sid`,`qid`,`section_json`) VALUES 
-( '3', '3', '[{"selectOption":["05:00","06:00","07:00"],"selectIntro":"起床"},{"selectOption":["21:00","22:00","23:00"],"selectIntro":"睡觉"}]' );
+( '3', '3', '[{"selectOption":["05:00","06:00","07:00"],"selectIntro":"起床"},{"selectOption":["21:00","22:00","23:00"],"selectIntro":"睡觉"}]' ),
+( '4', '15', '[{"selectOption":["upup","up1"],"selectIntro":"UP"},{"selectOption":["down","d1"],"selectIntro":"Down"}]' );
 -- ---------------------------------------------------------
 
 
@@ -148,7 +173,13 @@ INSERT INTO `dorm_question_section`(`sid`,`qid`,`section_json`) VALUES
 
 -- Dump data of "dorm_question_plan" -----------------------
 INSERT INTO `dorm_question_plan`(`pid`,`qid_json`,`plan_name`,`description`,`done`) VALUES 
-( '1', '[1,2,3,4,5,6]', '测试计划', '测试用的计划', '0' );
+( '1', '[3,4,5,6,1,2]', '测试计划', '测试用的计划', '0' ),
+( '2', '[]', 'P123', '', '0' ),
+( '3', '[]', 'P567', '', '0' ),
+( '4', '[]', 'P908', '', '0' ),
+( '5', '[]', 'addPlanName', '', '0' ),
+( '6', '[]', '343', '', '0' ),
+( '7', '[]', '121', '', '0' );
 -- ---------------------------------------------------------
 
 
@@ -159,6 +190,16 @@ CREATE INDEX `index_pid` USING BTREE ON `dorm_user_chosen`( `pid` );
 
 -- CREATE INDEX "index_qid" ------------------------------------
 CREATE INDEX `index_qid` USING BTREE ON `dorm_question_extra`( `qid` );
+-- -------------------------------------------------------------
+
+
+-- CREATE INDEX "index_account" --------------------------------
+CREATE INDEX `index_account` USING BTREE ON `dorm_account`( `account` );
+-- -------------------------------------------------------------
+
+
+-- CREATE INDEX "index_pid1" -----------------------------------
+CREATE INDEX `index_pid1` USING BTREE ON `dorm_account`( `pid` );
 -- -------------------------------------------------------------
 
 

@@ -18,13 +18,11 @@ public class QuestionCacheHandler {
 
     @Value("${application.cache.useLocalCache}")
     private boolean useLocalCache;
+
     @Value("${application.cache.useRedisCache}")
     private boolean useRedisCache;
-    private WeakHashMap<Integer, String> cache = new WeakHashMap<>();
 
-    public boolean useCache() {
-        return useRedisCache || useLocalCache;
-    }
+    private WeakHashMap<Integer, String> cache = new WeakHashMap<>();
 
     public HashMap<Integer, Object> get(List<Integer> allQid) {
         HashMap<Integer, Object> getResult = new HashMap<>();
@@ -42,14 +40,11 @@ public class QuestionCacheHandler {
         for (Integer qid : allQid) {
             String questionJsonData = getFromLocalCache(qid);
             if (questionJsonData != null) {
-                System.out.println("ID: " + qid + " get from local cache");
                 cachedQuestionJsonData.put(qid, questionJsonData);
             } else if (useRedisCache && allRedisCacheId.contains(qid.toString())) {
-                System.out.println("ID: " + qid + " get from redis cache");
                 // This question data can get from redis cache
                 needGetFromRedisCacheQid.add(qid.toString());
             } else {
-                System.out.println("ID: " + qid + " need get from db");
                 needGetFromDatabase.add(qid);
             }
         }
@@ -80,10 +75,6 @@ public class QuestionCacheHandler {
 
     private String getFromRedisCache(Integer key) {
         return useRedisCache ? (String) redisTemplate.opsForHash().get("dorm_question", key) : null;
-    }
-
-    private List getFromRedisCache(List keys) {
-        return useRedisCache ? redisTemplate.opsForHash().multiGet("dorm_question", keys) : null;
     }
 
     private void putIntoRedisCache(Integer key, String value) {
